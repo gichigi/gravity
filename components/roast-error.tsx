@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react"
 
 interface RoastErrorProps {
+  status: string
   message: string
   onDismiss: () => void
 }
 
-export default function RoastError({ message, onDismiss }: RoastErrorProps) {
+export default function RoastError({ status, message, onDismiss }: RoastErrorProps) {
   const [isVisible, setIsVisible] = useState(true)
 
   // Auto-dismiss after 4 seconds
@@ -31,7 +32,7 @@ export default function RoastError({ message, onDismiss }: RoastErrorProps) {
     }`}>
       {/* Validation error styling - flush against input */}
       <p className="text-red-400/80 text-sm font-normal leading-relaxed mt-1">
-        {message}
+        <b>{status}:</b> {message}
       </p>
     </div>
   )

@@ -57,7 +57,7 @@ const PROMPT_SUGGESTIONS = [
 ]
 
 export default function Home() {
-  const [roast, setRoast] = useState<string | null>(null)
+  const [roast, setRoast] = useState<{status: string, message: string} | null>(null)
   const [originalPrompt, setOriginalPrompt] = useState<string>("")
   const [shuffledSuggestions, setShuffledSuggestions] = useState<typeof PROMPT_SUGGESTIONS>([])
 
@@ -68,8 +68,8 @@ export default function Home() {
     setShuffledSuggestions(selected)
   }, [])
 
-  const handleRoast = (roastMessage: string, prompt: string) => {
-    setRoast(roastMessage)
+  const handleRoast = (roastData: {status: string, message: string}, prompt: string) => {
+    setRoast(roastData)
     setOriginalPrompt(prompt)
   }
 
@@ -106,7 +106,8 @@ export default function Home() {
           {/* Roast Error Display - positioned right below input */}
           {roast && (
             <RoastError 
-              message={roast}
+              status={roast.status}
+              message={roast.message}
               onDismiss={handleDismiss}
             />
           )}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Plus, ArrowUp, Settings2, Mic, X, Check, Loader2 } from "lucide-react"
 
 interface ChatInputProps {
-  onRoast: (roast: string, prompt: string) => void
+  onRoast: (roast: {status: string, message: string}, prompt: string) => void
   initialValue?: string
   suggestionValue?: string
 }
@@ -40,16 +40,16 @@ export default function ChatInput({ onRoast, initialValue = "", suggestionValue 
 
         const data = await response.json()
 
-        if (data.roast) {
-          console.log("🔥 Roast received:", data.roast)
-          onRoast(data.roast, input.trim())
+        if (data.status && data.message) {
+          console.log("🔥 Roast received:", data)
+          onRoast(data, input.trim())
         } else if (data.error) {
           console.error("Error from API:", data.error)
-          onRoast(data.error, input.trim())
+          onRoast({ status: "Error", message: data.error }, input.trim())
         }
       } catch (error) {
         console.error("Failed to get roast:", error)
-        onRoast("Network error. Your idea is so bad it broke the internet.", input.trim())
+        onRoast({ status: "Network Error", message: "Your idea is so bad it broke the internet." }, input.trim())
       } finally {
         setIsLoading(false)
         // Keep input persistent - don't clear it

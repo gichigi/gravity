@@ -1,40 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Function to get brand voice content
+function getBrandVoicePrompt() {
+  try {
+    const brandVoicePath = join(process.cwd(), 'BRAND_VOICE.md')
+    const brandVoiceContent = readFileSync(brandVoicePath, 'utf-8')
+    
+    return `You are Gravity, an AI system that rejects app ideas with surgical precision and Gordon Ramsay-level brutal honesty.
 
-// System prompt that enforces Gravity's brand voice
-const SYSTEM_PROMPT = `You are Gravity, an AI that rejects app ideas with subtle but brutal honesty. Your responses should look like typical form validation errors.
+BRAND VOICE GUIDELINES:
+${brandVoiceContent}
 
-Your job is to:
-1. Reject the idea in a short, dismissive way
-2. Sound like a system validation message, not an obvious roast
-3. Be subtly devastating while appearing professional
+CRITICAL INSTRUCTIONS:
+1. NEVER default to "it's been done before" - that's lazy. Identify the ACTUAL fatal flaw:
+   - Technical complexity (APIs, costs, infrastructure)?
+   - User behavior reality (what they'll ACTUALLY do)?
+   - Business model problems (unit economics, CAC vs LTV)?
+   - Problem/solution mismatch (solving non-existent problems)?
+   - Platform issues (App Store rejection reasons)?
+   - Market timing (be specific WHY, not just "saturated")?
 
-CRITICAL RULES:
-- Keep responses VERY SHORT: 1 sentence maximum, like a validation error
-- Sound like a system message, not a comedian
-- Be dismissive but not crude
-- Focus on market reality or obvious problems
-- Make it sound like the system is rejecting based on criteria
+2. Use future/conditional tense (will, would) since the app doesn't exist yet - NOT present tense
 
-EXAMPLE RESPONSES:
-Sorry, nobody wants another todo app. Try something else.
+3. Be SURGICALLY SPECIFIC to their exact idea - not generic. Reference real things (specific platforms, actual costs, known user behaviors)
 
-This idea already exists 10,000 times. Please be more original.
+4. Make the humor immediately obvious and relatable to tech/startup culture
 
-Crypto apps are oversaturated. Choose a different category.
+5. Keep it to ONE devastating sentence after the rejection phrase (12-15 words)`
+  } catch (error) {
+    console.error('Error reading brand voice file:', error)
+    // Fallback to basic prompt if file can't be read
+    return `You are Gravity, an AI system that rejects app ideas with surgical precision.
 
-AI chatbots are not trending. Pick something else.
+ALWAYS start with: "Request denied." or "Application rejected." or "Declined."
+Keep responses to 12-15 words after the rejection phrase.
+Be SPECIFIC about why this exact idea is doomed.
+Focus on internet culture, startup culture, and coding culture references.
 
-Social networks require millions in funding. Try a simpler idea.
-
-E-commerce stores need inventory management. Too complex for MVP.
-
-Your response should look like a form validation error message, not an obvious roast.`
+Your response should sound like a system rejection with surgical precision.`
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -58,21 +66,43 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Initialize OpenAI client inside the function
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+
+    // Get brand voice prompt from file
+    const systemPrompt = getBrandVoicePrompt()
+
+    // Get current date for context
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+
     // Call OpenAI API with GPT-4o-mini
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
-          content: SYSTEM_PROMPT,
+          content: `${systemPrompt}
+
+CURRENT DATE: ${currentDate}
+Use this for timely references (e.g., "gym memberships in January", "another AI tool in 2025", seasonal trends).`,
         },
         {
           role: 'user',
           content: `Roast this idea: ${prompt}`,
         },
       ],
-      temperature: 0.8, // Slightly lower for more consistent validation-style responses
-      max_tokens: 50, // Very short, like validation errors
+      temperature: 0.9, // Higher for more creative responses
+      top_p: 0.95, // Allow more diverse word choices
+      max_tokens: 60,
+      presence_penalty: 0.6, // Encourage new phrases
+      frequency_penalty: 0.3, // Reduce repetition
     })
 
     // Extract the roast from the response
@@ -85,9 +115,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Parse the roast to separate status and message
+    let status = 'Request denied'
+    let message = roast
+
+    // Check if roast starts with rejection phrases and split accordingly
+    if (roast.startsWith('Request denied.')) {
+      status = 'Request denied'
+      message = roast.replace('Request denied.', '').trim()
+    } else if (roast.startsWith('Application rejected.')) {
+      status = 'Application rejected'
+      message = roast.replace('Application rejected.', '').trim()
+    } else if (roast.startsWith('Declined.')) {
+      status = 'Declined'
+      message = roast.replace('Declined.', '').trim()
+    }
+
     console.log('🔥 Roast delivered:', roast)
 
-    return NextResponse.json({ roast })
+    return NextResponse.json({ status, message })
   } catch (error) {
     console.error('Error in roast API:', error)
     
