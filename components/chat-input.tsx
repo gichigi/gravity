@@ -4,17 +4,56 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, ArrowUp, Settings2, Mic, X, Check } from "lucide-react"
+import { Plus, ArrowUp, Settings2, Mic, X, Check, Loader2 } from "lucide-react"
 
-export default function ChatInput() {
-  const [input, setInput] = useState("")
+interface ChatInputProps {
+  onRoast: (roast: string, prompt: string) => void
+  initialValue?: string
+  suggestionValue?: string
+}
+
+export default function ChatInput({ onRoast, initialValue = "", suggestionValue }: ChatInputProps) {
+  const [input, setInput] = useState(initialValue)
   const [isRecording, setIsRecording] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Update input when initialValue or suggestionValue changes
+  useEffect(() => {
+    setInput(suggestionValue || initialValue)
+  }, [initialValue, suggestionValue])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (input.trim()) {
+    if (input.trim() && !isLoading) {
       console.log("Submitted:", input)
-      setInput("")
+      setIsLoading(true)
+      
+      try {
+        // Call the roast API
+        const response = await fetch('/api/roast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: input }),
+        })
+
+        const data = await response.json()
+
+        if (data.roast) {
+          console.log("🔥 Roast received:", data.roast)
+          onRoast(data.roast, input.trim())
+        } else if (data.error) {
+          console.error("Error from API:", data.error)
+          onRoast(data.error, input.trim())
+        }
+      } catch (error) {
+        console.error("Failed to get roast:", error)
+        onRoast("Network error. Your idea is so bad it broke the internet.", input.trim())
+      } finally {
+        setIsLoading(false)
+        // Keep input persistent - don't clear it
+      }
     }
   }
 
@@ -107,13 +146,21 @@ export default function ChatInput() {
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask v0 to build..."
+                placeholder="Ask Gravity to build..."
                 className="w-full bg-transparent text-gray-300 placeholder-gray-500 resize-none border-none outline-none text-base leading-relaxed min-h-[24px] max-h-32 transition-all duration-200"
                 rows={1}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement
                   target.style.height = "auto"
                   target.style.height = target.scrollHeight + "px"
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    if (input.trim() && !isLoading) {
+                      handleSubmit(e)
+                    }
+                  }
                 }}
               />
 
@@ -161,10 +208,14 @@ export default function ChatInput() {
                 <Button
                   type="submit"
                   size="sm"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || isLoading}
                   className="h-8 w-8 p-0 bg-zinc-700 hover:bg-zinc-600 disabled:bg-zinc-800 disabled:text-zinc-500 text-white rounded-lg transition-all duration-200 hover:scale-110 disabled:hover:scale-100"
                 >
-                  <ArrowUp className="h-5 w-5" />
+                  {isLoading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <ArrowUp className="h-5 w-5" />
+                  )}
                 </Button>
               </div>
             </div>
