@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# We want the rejections to spread - no blocking here
+Sitemap: https://gravity.app/sitemap.xml

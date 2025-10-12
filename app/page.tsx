@@ -123,7 +123,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex justify-center p-4 pt-48 sm:pt-28" style={{ backgroundColor: 'oklch(18.2% 0 0)' }}>
+    <div className="min-h-screen flex justify-center p-4 pt-32 sm:pt-48" style={{ backgroundColor: 'oklch(18.2% 0 0)' }}>
       <div className="w-full max-w-3xl flex flex-col items-center pt-4 sm:pt-0">
         {/* Title */}
         <h1 className="text-center font-semibold tracking-tighter sm:text-[32px] md:text-[46px] text-[29px] mb-4" style={{ fontFamily: 'GeistSans, "GeistSans Fallback", ui-sans-serif, system-ui, sans-serif', lineHeight: '69px', letterSpacing: '-2.3px', color: 'oklch(0.946 0 0)' }}>
