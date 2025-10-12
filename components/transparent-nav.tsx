@@ -1,15 +1,18 @@
 "use client"
 
-import { Menu, User, ChevronDown, MessageCircle, AtSign } from "lucide-react"
+import { Menu, User, ChevronDown, AtSign } from "lucide-react"
+import Image from "next/image"
 
 const GravityLogo = ({ size = "md" }: { size?: "sm" | "md" }) => {
   const sizeClasses = size === "sm" ? "w-4 h-4" : "w-5 h-5"
   
   return (
     <div className={sizeClasses}>
-      <img 
+      <Image 
         src="/gravity-icon-white.svg" 
         alt="Gravity" 
+        width={size === "sm" ? 16 : 20}
+        height={size === "sm" ? 16 : 20}
         className="w-full h-full"
       />
     </div>

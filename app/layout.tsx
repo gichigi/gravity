@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://gravity.app'),
   title: "Gravity - AI-Powered Rejection Generator",
   description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
   keywords: ["AI parody", "startup rejection", "comedy", "developer tools", "tech humor", "brutal honesty", "Gordon Ramsay"],

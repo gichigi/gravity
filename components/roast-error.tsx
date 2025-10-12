@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react"
+import { useState, forwardRef, useImperativeHandle } from "react"
 
 interface RoastErrorProps {
   status: string
@@ -8,7 +8,11 @@ interface RoastErrorProps {
   onDismiss: () => void
 }
 
-const RoastError = forwardRef(({ status, message, onDismiss }: RoastErrorProps, ref) => {
+interface RoastErrorRef {
+  dismiss: () => void
+}
+
+const RoastError = forwardRef<RoastErrorRef, RoastErrorProps>(({ status, message, onDismiss }, ref) => {
   const [isVisible, setIsVisible] = useState(true)
 
   // Random dismissal button texts
@@ -65,6 +69,8 @@ const RoastError = forwardRef(({ status, message, onDismiss }: RoastErrorProps, 
     </div>
   )
 })
+
+RoastError.displayName = 'RoastError'
 
 export default RoastError
 
