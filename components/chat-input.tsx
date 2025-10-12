@@ -19,8 +19,31 @@ export default function ChatInput({ onRoast, initialValue = "", suggestionValue 
 
   // Update input when initialValue or suggestionValue changes
   useEffect(() => {
-    setInput(suggestionValue || initialValue)
+    const newValue = suggestionValue || initialValue
+    setInput(newValue)
+    
+    // Trigger auto-resize for textarea when value changes programmatically
+    setTimeout(() => {
+      const textarea = document.querySelector('textarea') as HTMLTextAreaElement
+      if (textarea && newValue) {
+        textarea.style.height = "auto"
+        textarea.style.height = Math.min(textarea.scrollHeight, 128) + "px"
+      }
+    }, 100) // Slightly longer delay to ensure DOM is ready
   }, [initialValue, suggestionValue])
+
+  // Auto-resize whenever input changes
+  useEffect(() => {
+    if (input) {
+      setTimeout(() => {
+        const textarea = document.querySelector('textarea') as HTMLTextAreaElement
+        if (textarea) {
+          textarea.style.height = "auto"
+          textarea.style.height = Math.min(textarea.scrollHeight, 128) + "px"
+        }
+      }, 50)
+    }
+  }, [input])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -147,12 +170,12 @@ export default function ChatInput({ onRoast, initialValue = "", suggestionValue 
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask Gravity to build..."
-                className="w-full bg-transparent text-gray-300 placeholder-gray-500 resize-none border-none outline-none text-base leading-relaxed min-h-[24px] max-h-32 transition-all duration-200"
+                className="w-full bg-transparent text-gray-300 placeholder-gray-500 resize-none border-none outline-none text-base leading-relaxed min-h-[24px] max-h-32 transition-all duration-200 break-words whitespace-pre-wrap"
                 rows={1}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement
                   target.style.height = "auto"
-                  target.style.height = target.scrollHeight + "px"
+                  target.style.height = Math.min(target.scrollHeight, 128) + "px"
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {

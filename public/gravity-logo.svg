@@ -1,0 +1,8 @@
+<svg viewBox="0 0 120 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon -->
+  <path d="M12 22L2 4H22L12 22Z" fill="currentColor"/>
+  <!-- Wordmark -->
+  <text x="26" y="18" font-family="GeistSans, ui-sans-serif, system-ui, sans-serif" font-size="20" font-weight="400" fill="currentColor" letter-spacing="-0.02em">
+    Gravity
+  </text>
+</svg>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react"
 
 interface RoastErrorProps {
   status: string
@@ -8,33 +8,63 @@ interface RoastErrorProps {
   onDismiss: () => void
 }
 
-export default function RoastError({ status, message, onDismiss }: RoastErrorProps) {
+const RoastError = forwardRef(({ status, message, onDismiss }: RoastErrorProps, ref) => {
   const [isVisible, setIsVisible] = useState(true)
 
-  // Auto-dismiss after 4 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(false)
-      // Wait for exit animation to complete before calling onDismiss
-      setTimeout(() => {
-        onDismiss()
-      }, 300) // Match the transition duration
-    }, 4000)
+  // Random dismissal button texts
+  const buttonTexts = [
+    "Got it", "Sorry", "God, you're right", "Wow, ok", "I surrender", 
+    "You win", "Fair point", "Touché", "That hurt", "Brutal but fair",
+    "Ouch", "Haha, true", "You got me", "Fair enough", "I give up"
+  ]
+  const [selectedButton] = useState(buttonTexts[Math.floor(Math.random() * buttonTexts.length)])
 
-    return () => clearTimeout(timer)
-  }, [onDismiss])
+  const dismiss = () => {
+    setIsVisible(false)
+    setTimeout(onDismiss, 250)
+  }
+
+  useImperativeHandle(ref, () => ({
+    dismiss
+  }))
+
+  const handleDismiss = () => {
+    dismiss()
+  }
 
   return (
-    <div className={`w-full max-w-2xl transition-all duration-300 ${
+    <div className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm z-[60] transition-all duration-250 ease-out ${
       isVisible 
-        ? 'opacity-100 translate-y-0' 
-        : 'opacity-0 -translate-y-1'
+        ? 'opacity-100 translate-x-0' 
+        : 'opacity-0 translate-x-full'
     }`}>
-      {/* Validation error styling - flush against input */}
-      <p className="text-red-400/80 text-sm font-normal leading-relaxed mt-1">
-        <b>{status}:</b> {message}
-      </p>
+      {/* Vercel-style toast container */}
+      <div className="bg-black/80 backdrop-blur-xl border border-white/10 
+                      rounded-xl shadow-2xl shadow-black/50 p-4 space-y-3">
+        
+        {/* Status */}
+        <div className="text-sm font-medium text-white/90 leading-tight">
+          {status}
+        </div>
+        
+        {/* Message */}
+        <div className="text-sm text-white/70 leading-relaxed break-words">
+          {message}
+        </div>
+        
+        {/* Dismissal Button */}
+        <button 
+          onClick={handleDismiss}
+          className="w-full px-3 py-2 text-xs font-medium text-white/60 hover:text-white 
+                     bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 
+                     rounded-lg transition-all duration-200"
+        >
+          {selectedButton}
+        </button>
+      </div>
     </div>
   )
-}
+})
+
+export default RoastError
 

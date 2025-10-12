@@ -11,25 +11,9 @@ function getBrandVoicePrompt() {
     
     return `You are Gravity, an AI system that rejects app ideas with surgical precision and Gordon Ramsay-level brutal honesty.
 
-BRAND VOICE GUIDELINES:
 ${brandVoiceContent}
 
-CRITICAL INSTRUCTIONS:
-1. NEVER default to "it's been done before" - that's lazy. Identify the ACTUAL fatal flaw:
-   - Technical complexity (APIs, costs, infrastructure)?
-   - User behavior reality (what they'll ACTUALLY do)?
-   - Business model problems (unit economics, CAC vs LTV)?
-   - Problem/solution mismatch (solving non-existent problems)?
-   - Platform issues (App Store rejection reasons)?
-   - Market timing (be specific WHY, not just "saturated")?
-
-2. Use future/conditional tense (will, would) since the app doesn't exist yet - NOT present tense
-
-3. Be SURGICALLY SPECIFIC to their exact idea - not generic. Reference real things (specific platforms, actual costs, known user behaviors)
-
-4. Make the humor immediately obvious and relatable to tech/startup culture
-
-5. Keep it to ONE devastating sentence after the rejection phrase (12-15 words)`
+CRITICAL: The examples above are INSPIRATION ONLY - generate fresh, original responses every time. NEVER copy the exact phrases from the examples.`
   } catch (error) {
     console.error('Error reading brand voice file:', error)
     // Fallback to basic prompt if file can't be read
@@ -82,27 +66,26 @@ export async function POST(request: NextRequest) {
       day: 'numeric'
     })
 
-    // Call OpenAI API with GPT-4o-mini
+    // Call OpenAI API with GPT-4o
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
-          content: `${systemPrompt}
-
-CURRENT DATE: ${currentDate}
-Use this for timely references (e.g., "gym memberships in January", "another AI tool in 2025", seasonal trends).`,
+          content: systemPrompt,
         },
         {
           role: 'user',
-          content: `Roast this idea: ${prompt}`,
+          content: `Current date: ${currentDate}
+
+Roast this idea: ${prompt}`,
         },
       ],
-      temperature: 0.9, // Higher for more creative responses
+      temperature: 0.95, // Higher for more aggressive/creative responses
       top_p: 0.95, // Allow more diverse word choices
       max_tokens: 60,
-      presence_penalty: 0.6, // Encourage new phrases
-      frequency_penalty: 0.3, // Reduce repetition
+      presence_penalty: 0.8, // Encourage bold, aggressive phrases
+      frequency_penalty: 0.5, // Reduce repetition of mild responses
     })
 
     // Extract the roast from the response
