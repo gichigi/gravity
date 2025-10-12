@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "Gravity",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.png?v=2",
         width: 1200,
         height: 630,
         alt: "Gravity - Request Denied",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Gravity - AI-Powered Rejection Generator",
     description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
-    images: ["/twitter-image.png"],
+    images: ["/twitter-image.png?v=2"],
     creator: "@gravity_app",
   },
   icons: {
