@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gravity.app'),
-  title: "Gravity - AI-Powered Rejection Generator",
+  title: "Gravity",
   description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
   keywords: ["AI parody", "startup rejection", "comedy", "developer tools", "tech humor", "brutal honesty", "Gordon Ramsay"],
   authors: [{ name: "Gravity Team" }],
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://gravity.app",
-    title: "Gravity - AI-Powered Rejection Generator",
+    title: "Gravity",
     description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
     siteName: "Gravity",
     images: [
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gravity - AI-Powered Rejection Generator",
+    title: "Gravity",
     description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
     images: ["/twitter-image.png?v=2"],
     creator: "@gravity_app",
@@ -72,7 +72,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              "name": "Gravity - AI-Powered Rejection Generator",
+              "name": "Gravity",
               "description": "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
               "url": "https://gravity.app",
               "applicationCategory": "EntertainmentApplication",
