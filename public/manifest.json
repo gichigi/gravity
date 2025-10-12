@@ -1,7 +1,7 @@
 {
   "name": "Gravity - AI-Powered Rejection Generator",
   "short_name": "Gravity",
-  "description": "Request denied. Build anything with a single prompt? We reject ideas with surgical precision and Gordon Ramsay-level brutal honesty.",
+  "description": "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

@@ -7,9 +7,11 @@ const GravityLogo = ({ size = "md" }: { size?: "sm" | "md" }) => {
   
   return (
     <div className={sizeClasses}>
-      <svg viewBox="0 0 24 24" className="w-full h-full text-white fill-current">
-        <path d="M12 22L2 4H22L12 22Z" />
-      </svg>
+      <img 
+        src="/gravity-icon-white.svg" 
+        alt="Gravity" 
+        className="w-full h-full"
+      />
     </div>
   )
 }

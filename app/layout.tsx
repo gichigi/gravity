@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Gravity - AI-Powered Rejection Generator",
-  description: "Request denied. Build anything with a single prompt? We reject ideas with surgical precision and Gordon Ramsay-level brutal honesty.",
+  description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
   keywords: ["AI parody", "startup rejection", "comedy", "developer tools", "tech humor", "brutal honesty", "Gordon Ramsay"],
   authors: [{ name: "Gravity Team" }],
   creator: "Gravity",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://gravity.app",
     title: "Gravity - AI-Powered Rejection Generator",
-    description: "Request denied. Build anything with a single prompt? We reject ideas with surgical precision and Gordon Ramsay-level brutal honesty.",
+    description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
     siteName: "Gravity",
     images: [
       {
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Gravity - AI-Powered Rejection Generator",
-    description: "Request denied. Build anything with a single prompt? We reject ideas with surgical precision and Gordon Ramsay-level brutal honesty.",
+    description: "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
     images: ["/twitter-image.png"],
     creator: "@gravity_app",
   },
@@ -72,7 +72,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "Gravity - AI-Powered Rejection Generator",
-              "description": "Request denied. Build anything with a single prompt? We reject ideas with surgical precision and Gordon Ramsay-level brutal honesty.",
+              "description": "Gravity is an AI-powered tool that helps bring your startup dreams back down to Earth, faster with natural language prompts.",
               "url": "https://gravity.app",
               "applicationCategory": "EntertainmentApplication",
               "operatingSystem": "Web Browser",
