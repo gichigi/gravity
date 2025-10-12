@@ -48,7 +48,7 @@ Tired of AI assistants that praise every mediocre idea with endless positivity? 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/gravity.git
+git clone https://github.com/gichigi/gravity.git
 cd gravity
 ```
 
