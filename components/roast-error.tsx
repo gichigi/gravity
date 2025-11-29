@@ -43,7 +43,7 @@ const RoastError = forwardRef<RoastErrorRef, RoastErrorProps>(({ status, message
         : 'opacity-0 translate-x-full'
     }`}>
       {/* Vercel-style toast container */}
-      <div className="bg-black/80 backdrop-blur-xl border border-white/10 
+      <div className="bg-black/80 backdrop-blur-xl border border-red-500/40 
                       rounded-xl shadow-2xl shadow-black/50 p-4 space-y-3">
         
         {/* Status */}

@@ -17,9 +17,9 @@ CRITICAL: The examples above are INSPIRATION ONLY - generate fresh, original res
   } catch (error) {
     console.error('Error reading brand voice file:', error)
     // Fallback to basic prompt if file can't be read
-    return `You are Gravity, an AI system that rejects app ideas with surgical precision.
+        return `You are Gravity, an AI system that rejects app ideas with surgical precision.
 
-ALWAYS start with: "Request denied." or "Application rejected." or "Declined."
+ALWAYS start with a rejection phrase like: "Request denied.", "Application rejected.", "Declined.", "Nope.", "Oops.", "404.", "Access denied.", "Build failed.", "Nice try.", etc.
 Keep responses to 12-15 words after the rejection phrase.
 Be SPECIFIC about why this exact idea is doomed.
 Focus on internet culture, startup culture, and coding culture references.
@@ -103,15 +103,32 @@ Roast this idea: ${prompt}`,
     let message = roast
 
     // Check if roast starts with rejection phrases and split accordingly
-    if (roast.startsWith('Request denied.')) {
-      status = 'Request denied'
-      message = roast.replace('Request denied.', '').trim()
-    } else if (roast.startsWith('Application rejected.')) {
-      status = 'Application rejected'
-      message = roast.replace('Application rejected.', '').trim()
-    } else if (roast.startsWith('Declined.')) {
-      status = 'Declined'
-      message = roast.replace('Declined.', '').trim()
+    const rejectionPhrases = [
+      { phrase: 'Request denied.', status: 'Request denied' },
+      { phrase: 'Application rejected.', status: 'Application rejected' },
+      { phrase: 'Declined.', status: 'Declined' },
+      { phrase: 'Nope.', status: 'Nope' },
+      { phrase: 'Oops.', status: 'Oops' },
+      { phrase: '404.', status: '404' },
+      { phrase: 'Access denied.', status: 'Access Denied' },
+      { phrase: 'Permission denied.', status: 'Permission Denied' },
+      { phrase: 'Forbidden.', status: 'Forbidden' },
+      { phrase: 'Invalid request.', status: 'Invalid Request' },
+      { phrase: 'Build failed.', status: 'Build Failed' },
+      { phrase: 'Deployment rejected.', status: 'Deployment Rejected' },
+      { phrase: 'PR rejected.', status: 'PR Rejected' },
+      { phrase: 'Validation error.', status: 'Validation Error' },
+      { phrase: 'Nice try.', status: 'Nice Try' },
+      { phrase: 'Not happening.', status: 'Not Happening' },
+      { phrase: 'Hard pass.', status: 'Hard Pass' },
+    ]
+
+    for (const { phrase, status: statusText } of rejectionPhrases) {
+      if (roast.startsWith(phrase)) {
+        status = statusText
+        message = roast.replace(phrase, '').trim()
+        break
+      }
     }
 
     console.log('🔥 Roast delivered:', roast)
